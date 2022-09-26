@@ -10,7 +10,10 @@ class Grid ():
 
 			Renvoie sous forme de booléen si le bateau b peut etre placé a la postion et avec la direction indiquées
 		"""	
+		# Vérification du possible positionnement du bateau dans la grille
+		size_bat = TODO
 
+		# Placement du bateau
 		lig_pos = pos[0]
 		col_pos = pos[1]
 		# dir = 1 --> vertical
@@ -49,5 +52,14 @@ class Grid ():
 	
 
 def create_grid():
+	# Grille
 	mat = np.zeros(10, 10, np.int32)
+
+	# Dictionnaire des correspondances bateau-taille
+	dict_bat_size = { 1:5, 2:4, 3:3, 4:3, 5:2 }
+
+	# Dictionnaire des correspondances identifiant-bateau
+	dict_id_bat = { "Porte-Avions":1, "Croiseur":2, "Contre-Torpilleur":3, "Sous-Marin":4, "Torpilleur":5}
+
+	# Création d'une partie (?)
 	return
