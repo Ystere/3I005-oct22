@@ -44,7 +44,7 @@ class Grid ():
 					return False 
 
 	def place(self, grid: Grid, bat: int, pos: tuple(int, int), dir: int):
-		""" Grille * int * tuple(int, int) * int
+		""" Grille * int * tuple(int, int) * int --> Grille
 
 			Renvoie la grille modifiée après un placement d'un bateau spécifié
 		"""
