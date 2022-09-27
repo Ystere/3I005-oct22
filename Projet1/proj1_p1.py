@@ -15,7 +15,7 @@ class Grid ():
 		dict_id_bat = { 1:"Porte-Avions", 2:"Croiseur", 3:"Contre-Torpilleur", 4:"Sous-Marin", 5:"Torpilleur" }
 
 	def peut_placer(self, grid: Grid, bat: int, pos: tuple(int,int), dir: int):
-		""" Grille * dict(str, int) * tuple(int, int) * int -> Bool
+		""" Grille * int * tuple(int, int) * int --> Bool
 
 			Renvoie sous forme de booléen si le bateau b peut etre placé a la postion et avec la direction indiquées
 		"""	
@@ -44,6 +44,8 @@ class Grid ():
 					return False 
 
 	def place(self, grid: Grid, bat, pos: tuple(int, int), dir: int):
+		"""
+		"""
 		if not self.peut_placer(grid, bat, pos, dir):
 			return grid
 		else:
@@ -55,7 +57,21 @@ class Grid ():
 					grid[lig][col] = bat
 
 	def place_alea(self, grille, bat):
-		return
+		""" Grille * int --> Grille
+
+			Renvoie la grille modifiée après un placement aléatoire d'un bateau spécifié
+		"""
+		coord = int(np.fix(self.size*np.random.random() + 1))
+
+		rand_dir 	= 0 if np.random.random() <= 0.5 else 1 		# 50% de chance pour 0 ou 1
+		rand_pos 	= (coord, coord)  								# cast vers int de (taille de la matrice+1)
+		cond 		= peut_placer(grille, bat, rand_pos, rand_dir)
+		while not cond:
+			coord = int(np.fix(self.size*np.random.random() + 1))
+			rand_dir 	= 0 if np.random.random() <= 0.5 else 1 
+			rand_pos 	= (coord, coord)
+			cond 		= peut_placer(grille, bat, rand_pos, rand_dir)
+		return place(grille, bat, rand_pos, rand_dir)
 
 	def display(self, grid):
 		return	
