@@ -44,7 +44,9 @@ class Grid ():
 					return False 
 
 	def place(self, grid: Grid, bat: int, pos: tuple(int, int), dir: int):
-		"""
+		""" Grille * int * tuple(int, int) * int
+
+			Renvoie la grille modifiée après un placement d'un bateau spécifié
 		"""
 		if not self.peut_placer(grid, bat, pos, dir):
 			return grid
@@ -52,9 +54,11 @@ class Grid ():
 			if dir:
 				for lig in range():
 					grid[lig][col] = bat
+					return grid
 			else:
 				for col in range():
 					grid[lig][col] = bat
+					return grid
 
 	def place_alea(self, grille: Grid, bat: int):
 		""" Grille * int --> Grille
@@ -62,7 +66,7 @@ class Grid ():
 			Renvoie la grille modifiée après un placement aléatoire d'un bateau spécifié
 		"""
 		coord = int(np.fix(self.size*np.random.random() + 1))
-		
+
 		rand_dir 	= 0 if np.random.random() <= 0.5 else 1 		# 50% de chance pour 0 ou 1
 		rand_pos 	= (coord, coord)  								# cast vers int de (taille de la matrice+1)
 		cond 		= peut_placer(grille, bat, rand_pos, rand_dir)
