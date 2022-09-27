@@ -8,6 +8,12 @@ class Grid ():
 		mat = np.zeros((10,10), dtype=int)
 		size = len(mat)
 
+		# Dictionnaire des correspondances bateau-taille
+		dict_bat_size = { 1:5, 2:4, 3:3, 4:3, 5:2 }
+
+		# Dictionnaire des correspondances identifiant-bateau
+		dict_id_bat = { 1:"Porte-Avions", 2:"Croiseur", 3:"Contre-Torpilleur", 4:"Sous-Marin", 5:"Torpilleur"}
+
 	def peut_placer(self, grid: Grid, bat: int, pos: tuple(int,int), dir: int):
 		""" Grille * dict(str, int) * tuple(int, int) * int -> Bool
 
@@ -59,12 +65,6 @@ class Grid ():
 	
 
 def create_grid():
-
-	# Dictionnaire des correspondances bateau-taille
-	dict_bat_size = { 1:5, 2:4, 3:3, 4:3, 5:2 }
-
-	# Dictionnaire des correspondances identifiant-bateau
-	dict_id_bat = { 1:"Porte-Avions", 2:"Croiseur", 3:"Contre-Torpilleur", 4:"Sous-Marin", 5:"Torpilleur"}
 
 	# Création d'une partie (?)
 	return
