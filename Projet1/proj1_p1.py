@@ -43,7 +43,7 @@ class Grid ():
 					print("Bateau impossible a placer : un bateau de type {} est en '{},{}'".format(dict_id_bat(bat), lig_pos, col_v))
 					return False 
 
-	def place(self, grid: Grid, bat, pos: tuple(int, int), dir: int):
+	def place(self, grid: Grid, bat: int, pos: tuple(int, int), dir: int):
 		"""
 		"""
 		if not self.peut_placer(grid, bat, pos, dir):
@@ -56,13 +56,13 @@ class Grid ():
 				for col in range():
 					grid[lig][col] = bat
 
-	def place_alea(self, grille, bat):
+	def place_alea(self, grille: Grid, bat: int):
 		""" Grille * int --> Grille
 
 			Renvoie la grille modifiée après un placement aléatoire d'un bateau spécifié
 		"""
 		coord = int(np.fix(self.size*np.random.random() + 1))
-
+		
 		rand_dir 	= 0 if np.random.random() <= 0.5 else 1 		# 50% de chance pour 0 ou 1
 		rand_pos 	= (coord, coord)  								# cast vers int de (taille de la matrice+1)
 		cond 		= peut_placer(grille, bat, rand_pos, rand_dir)
