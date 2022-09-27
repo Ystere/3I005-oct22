@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 # creer dictionnaire (?)
 class Grid ():
@@ -77,8 +78,12 @@ class Grid ():
 			cond 		= peut_placer(grille, bat, rand_pos, rand_dir)
 		return place(grille, bat, rand_pos, rand_dir)
 
-	def display(self, grid):
-		return	
+	def display(self, grille: Grid):
+		""" Grille --> None
+
+			Affiche la grille de jeu.
+		""" 
+		plt.matshow(grid)
 
 	def eq(self, gridA, gridB):
 		return
