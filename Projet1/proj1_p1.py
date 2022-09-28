@@ -100,7 +100,7 @@ class Grid ():
 		plt.show()
 
 def eq(gridA, gridB):
-	return
+	return np.equals(gridA, gridB)
 	
 
 def generate_grid():
