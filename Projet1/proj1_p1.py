@@ -100,6 +100,10 @@ class Grid ():
 		plt.show()
 
 def eq(gridA, gridB):
+	""" Grille * Grille --> Bool
+
+		Renvoie la valeur booléenne d'égalité entre deux grilles de jeu.
+	"""
 	return np.equals(gridA, gridB)
 	
 
