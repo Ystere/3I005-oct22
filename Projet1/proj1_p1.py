@@ -84,6 +84,7 @@ class Grid ():
 			Affiche la grille de jeu.
 		""" 
 		plt.matshow(grid)
+		plt.show()
 
 	def eq(self, gridA, gridB):
 		return
