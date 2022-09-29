@@ -22,14 +22,13 @@ class Grid ():
 		lig_pos = pos[0]
 		col_pos = pos[1]
 
-		# Vérification du possible positionnement du bateau dans la grille
 		size_bat = self.dict_bat_size.get(bat)
-		if lig_pos + size_bat >= self.size or col_pos + size_bat >= self.size:
-			print("Le bateau dépasse de la grille et n'est pas positionnable.")
-			return False
-
 		# dir = 1 --> vertical
-		if dir: 
+		if dir:
+			# Vérification du possible positionnement du bateau dans la grille
+			if lig_pos + size_bat > self.size:
+				print("Le bateau dépasse de la grille et n'est pas positionnable.")
+				return False
 			for lig_v in range(lig_pos, lig_pos+size_bat):
 				if self.grid[lig_v][col_pos] != 0:
 					print("Bateau impossible a placer : un bateau de type {} est en '{},{}'".format(self.dict_id_bat.get(bat), lig_v, col_pos))
@@ -37,6 +36,10 @@ class Grid ():
 
 		# dir = 0 --> horizontal
 		else:
+			# Vérification du possible positionnement du bateau dans la grille
+			if col_pos + size_bat > self.size:
+				print("Le bateau dépasse de la grille et n'est pas positionnable.")
+				return False
 			for col_v in range(col_pos, col_pos+size_bat):	
 				if self.grid[lig_pos][col_v] != 0:
 					print("Bateau impossible a placer : un bateau de type {} est en '{},{}'".format(self.dict_id_bat.get(bat), lig_pos, col_v))
@@ -115,18 +118,19 @@ def generate_grid():
 	return grid
 
 def calcul_nb_place(bat: int, grid: Grid):
-    """ int * Grille --> int
+	""" int * Grille --> int
 
-        Renvoie le nombre de façons de placer un bateau donné sur une grille vide
-    """
-    size_grid = grid.size
-    n = 0
-    for dir in range(0, 2):
-        for posx in range(0, size_grid):
-            for posy in range(0, size_grid):
-                if grid.peut_placer(bat, (posx, posy), dir):
-                    n += 1
-    return n
+		Renvoie le nombre de façons de placer un bateau donné sur une grille vide
+	"""
+	size_grid = grid.size
+	n = 0
+	m = 0
+	for dir in range(0, 2):
+		for posx in range(0, size_grid):
+			for posy in range(0, size_grid):
+				if grid.peut_placer(bat, (posx, posy), dir):
+					n += 1
+	return n
 
 
 
