@@ -104,7 +104,7 @@ def eq(gridA, gridB):
 
 		Renvoie la valeur booléenne d'égalité entre deux grilles de jeu.
 	"""
-	return np.equals(gridA, gridB)
+	return np.equals(gridA.grid, gridB.grid)
 	
 
 def generate_grid():
@@ -114,12 +114,32 @@ def generate_grid():
 
 	return grid
 
+def calcul_nb_place(bat: int, grid: Grid):
+    """ int * Grille --> int
+
+        Renvoie le nombre de façons de placer un bateau donné sur une grille vide
+    """
+    size_grid = grid.size
+    n = 0
+    for dir in range(0, 2):
+        for posx in range(0, size_grid):
+            for posy in range(0, size_grid):
+                if grid.peut_placer(bat, (posx, posy), dir):
+                    n = n+1
+    return n
+
+
+
+
 #	Test
 
 grid1 = Grid()
-grid1 = grid1.place(3, (1,1), 1)
-grid1 = grid1.place_alea(4)
+nb = calcul_nb_place(5, grid1)
+print(nb)
+
+#grid1 = grid1.place(3, (1,1), 1)
+#grid1 = grid1.place_alea(4)
 #grid1.display()
 
-grid2 = generate_grid()
-grid2.display()
+#grid2 = generate_grid()
+#grid2.display()
