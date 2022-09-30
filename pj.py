@@ -79,15 +79,16 @@ class Grid ():
 
 			Renvoie la grille modifiée après un placement aléatoire d'un bateau spécifié
 		"""
-		x = int(np.fix(self.size*np.random.random() + 1))
-		y = int(np.fix(self.size*np.random.random() + 1))
+		x = int(np.fix(self.size*np.random.random()))
+		y = int(np.fix(self.size*np.random.random()))
 
 		rand_dir 	= 0 if np.random.random() <= 0.5 else 1 		# 50% de chance pour 0 ou 1
 		rand_pos 	= (x, y)  								# cast vers int de (taille de la matrice+1)
 		cond 		= self.peut_placer(bat, rand_pos, rand_dir)
 		while not cond:
-			x = int(np.fix(self.size*np.random.random() + 1))
-			y = int(np.fix(self.size*np.random.random() + 1))
+			x = int(np.fix(self.size*np.random.random()))
+			y = int(np.fix(self.size*np.random.random()))
+			print((x,y))
 			rand_dir 	= 0 if np.random.random() <= 0.5 else 1 
 			rand_pos 	= (x, y)
 			cond 		= self.peut_placer(bat, rand_pos, rand_dir)
@@ -112,7 +113,7 @@ def eq(gridA, gridB):
 
 def generate_grid():
 	grid = Grid()
-	for i in range(1, 5):
+	for i in range(1, 6):
 		grid.place_alea(i)
 
 	return grid
@@ -145,5 +146,5 @@ print(nb)
 #grid1 = grid1.place_alea(4)
 #grid1.display()
 
-#grid2 = generate_grid()
-#grid2.display()
+grid2 = generate_grid()
+grid2.display()
