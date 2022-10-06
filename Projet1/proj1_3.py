@@ -5,16 +5,24 @@ import proj1_p2
 
 class Battle():
 	def __init__(self):
-		return
+		self.hit_count = 0
+		self.rand_grid = generate_grid()
 
 	def play(self, position):
-		return
+		if self.rand_grid[position[0]][position[1]] != 0:
+			self.hit_count += 1
+			print("Bateau touché")
+			return True
+		print("Cible ratée")
+		return False
 
 	def victory(self):
-		return
+		return True if hit_count == 17 else False
 	
 	def reset(self):
-		return
+		self.hit_count = 0
+		self.rand_grid = generate_grid()
+		print("Partie réinitalisée")
 	
 
 class RandomPlayer():
