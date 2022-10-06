@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
+import proj1_p2.py
 
 class Battle():
 	def __init__(self):
