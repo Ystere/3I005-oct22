@@ -89,8 +89,8 @@ class Grid ():
 	def process_place_alea(self) -> tuple:
 		""" Processus condensé aidant la fonction `place_alea`.
 		"""
-		x = rng.integers(10)		# Générateur pseudo-aléatoire d'entiers
-		y = rng.integers(10)
+		x = rng.integers(self.size)		# Générateur pseudo-aléatoire d'entiers
+		y = rng.integers(self.size)
 
 		drand 	= 0 if rng.random() <= 0.5 else 1
 		prand 	= (x, y)  										
@@ -104,7 +104,6 @@ class Grid ():
 		truth 			= self.peut_placer(bat, prand, drand)
 		while not truth:
 			(drand, prand)	= self.process_place_alea()
-			print(drand, prand)
 			truth 			= self.peut_placer(bat, prand, drand)
 		self.place(bat, prand, drand)
 		return self
