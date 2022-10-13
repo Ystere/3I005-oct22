@@ -90,8 +90,8 @@ class Grid ():
 	def process_place_alea(self) -> tuple:
 		""" Processus condensé aidant la fonction `place_alea`.
 		"""
-		x = rng.integers(2)		# Générateur pseudo-aléatoire d'entiers
-		y = rng.integers(2)
+		x = rng.integers(10)		# Générateur pseudo-aléatoire d'entiers
+		y = rng.integers(10)
 
 		drand 	= 0 if rng.random() <= 0.5 else 1
 		prand 	= (x, y)  										
@@ -178,8 +178,8 @@ def nb_generation(grid: Grid) -> int:
 
 ######==========	Jeux de tests	==========######
 
-grid1 = generate_grid()
-print(grid1.layout)
+#grid1 = generate_grid()
+#print(grid1.layout)
 
 #grid2 = Grid()
 #print(grid2.layout)
