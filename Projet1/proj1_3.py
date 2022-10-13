@@ -67,6 +67,7 @@ class RandomPlayer():
 			self.battle.play((x,y))		# on joue un coup dans une position aléatoire
 		return self.battle.attempt_count
 
+
 #-----Test----
 r = RandomPlayer()
 

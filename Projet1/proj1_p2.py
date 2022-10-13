@@ -175,12 +175,12 @@ def nb_generation(grid: Grid):
 
 #	Test
 
-grid1 = Grid()
-nbp = calcul_nb_place(1, grid1)
-print(nbp)
-nbpl = calcul_nb_place_liste([1,2,3], grid1)
-print(nbpl)
-grid1 = generate_grid()
+#grid1 = Grid()
+#nbp = calcul_nb_place(1, grid1)
+#print(nbp)
+#nbpl = calcul_nb_place_liste([1,2,3], grid1)
+#print(nbpl)
+#grid1 = generate_grid()
 #nbg = nb_generation(grid1)
 #print(nbg)
 
