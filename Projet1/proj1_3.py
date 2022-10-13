@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import math
+from numpy.random import default_rng
+rng = default_rng()
 import proj1_p2 as g
 
 class Battle():
@@ -23,11 +25,11 @@ class Battle():
 			Retourne si le coup joué est touché ou non.
 		"""
 		
-		if not self.play_grid.grid[position[0]][position[1]]:
+		if not self.play_grid.layout[position[0],position[1]]:
 			print("Coup non joué ici auparavant.")
 			self.attempt_count += 1
-			self.play_grid.grid[position[0]][position[1]] = True
-			if self.rand_grid.grid[position[0]][position[1]] != 0:
+			self.play_grid.layout[position[0],position[1]] = True
+			if self.rand_grid.layout[position[0],position[1]] != 0:
 				print("Bateau touché !")
 				self.hit_count += 1
 				return True
@@ -62,8 +64,8 @@ class RandomPlayer():
 		"""
 		random_grid = self.battle.rand_grid
 		while not self.battle.victory():	# tant qu'on a pas gagné
-			x = int(np.fix(random_grid.size*np.random.random()))
-			y = int(np.fix(random_grid.size*np.random.random()))
+			x = rng.integers(random_grid.size)
+			y = rng.integers(random_grid.size)
 			self.battle.play((x,y))		# on joue un coup dans une position aléatoire
 		return self.battle.attempt_count
 
