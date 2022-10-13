@@ -85,8 +85,7 @@ class Grid ():
 			else:
 				for col_v in range(col_pos, col_pos+size_bat):
 					self.layout[lig_pos,col_v] = bat
-			
-		return self
+			return self
 
 	def process_place_alea(self) -> tuple:
 		""" Processus condensé aidant la fonction `place_alea`.
