@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import copy
 import math
 import proj1_p2 as g
+from numpy.random import default_rng
+rng = default_rng()
 
 class Battle():
 	def __init__(self):
@@ -12,22 +14,16 @@ class Battle():
 		self.play_grid		= g.Grid()
 
 
-	def play(self, position):
-		# Vérification de la présence d'un marqueur dans la grille de coups joués
+	def play(self, position: tuple) -> bool:
+		""" Retourne si le coup joué est touché ou non.
 
-		# Si le marqueur est présent, ne rien faire
-		# Sinon, vérifier l'identifiant dans la grille de jeu. Si différent de 0, coup touché
-
-		""" tuple(int, int) --> bool
-
-			Retourne si le coup joué est touché ou non.
+			Hypothèse : Le coup n'a pas déja été joué ici.
 		"""
-		
-		if not self.play_grid.grid[position[0]][position[1]]:
+		if not self.play_grid.layout[position[0],position[1]]:
 			print("Coup non joué ici auparavant.")
 			self.attempt_count += 1
-			self.play_grid.grid[position[0]][position[1]] = True
-			if self.rand_grid.grid[position[0]][position[1]] != 0:
+			self.play_grid.layout[position[0],position[1]] = True
+			if self.rand_grid.layout[position[0],position[1]] != 0:
 				print("Bateau touché !")
 				self.hit_count += 1
 				return True
@@ -38,12 +34,13 @@ class Battle():
 			print("Coup déja joué ici, tentez une autre position.")
 			return False
 
-	def victory(self):
+	def victory(self) -> bool:
 		return self.hit_count == 17
-	def reset(self):
+
+	def reset(self) -> None:
 		self.hit_count = 0
 		self.rand_grid = g.generate_grid()
-		print("Partie réinitalisée")
+		print("Partie réinitalisée.")
 	
 
 class RandomPlayer():
@@ -54,17 +51,16 @@ class RandomPlayer():
 	def __init__(self):
 		self.battle = Battle()
 
-	def random_play(self):
-		""" --> int
+	def random_play(self) -> int:
+		""" Renvoie le nombre de coups joués avant la victoire
 
-			Renvoie le nombre de coups joués avant d'avoir touchés tous les bateaux 
-   			dans la grille aléatoire en jouant chaque coup de manière aléatoire
+		Cette fonction va tenter de jouer un coup valide tant que la condition de victoire n'est pas atteinte.
 		"""
 		random_grid = self.battle.rand_grid
-		while not self.battle.victory():	# tant qu'on a pas gagné
-			x = int(np.fix(random_grid.size*np.random.random()))
-			y = int(np.fix(random_grid.size*np.random.random()))
-			self.battle.play((x,y))		# on joue un coup dans une position aléatoire
+		while not self.battle.victory():	
+			x = rng.integers(random_grid.size)
+			y = rng.integers(random_grid.size)
+			self.battle.play((x,y))		
 		return self.battle.attempt_count
 
 
