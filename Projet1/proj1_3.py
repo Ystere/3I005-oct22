@@ -19,7 +19,6 @@ class Battle():
 
 				Hypothèse : Le coup n'a pas déja été joué ici.
 		"""
-		print(pos)
 		if pos[0] in range(0, self.play_grid.size) and pos[1] in range(0, self.play_grid.size):
 			if not self.play_grid.layout[pos[0], pos[1]]:
 				print("Coup non joué ici auparavant.")
@@ -68,11 +67,17 @@ class RandomPlayer():
 			self.battle.play((x, y))
 		return self.battle.attempt_count
 
+	def distribution_graph():
+		""" Renvoie le graphique de la distribution de la variable
+			aléatoire du nombre de coups joués pendant la partie.
+		Version aléatoire
+		"""
 
+		return
 # -----Test----
 r = RandomPlayer()
 
-#print(r.random_play())
+print("Nombre de coups 'Version aléatoire': {}".format(r.random_play()))
 s = 0
 for k in range(17, 101):
 	s = s + k*(math.comb(83, k-17)/math.comb(100, k))
@@ -116,10 +121,17 @@ class HeuristicPlayer():
 
 		return self.battle.attempt_count
 
+	def distribution_graph():
+		""" Renvoie le graphique de la distribution de la variable
+			aléatoire du nombre de coups joués pendant la partie.
+		Version heuristique
+		"""
 
+		return
+#--------------------
 h = HeuristicPlayer()
-print(h.hplay())
-
+print("Nombre de coups 'Version heuristique': {}".format(h.hplay()))
+#--------------------
 
 class SimpleP_Player():
 	pass
