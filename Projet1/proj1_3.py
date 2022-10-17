@@ -122,8 +122,19 @@ print(h.hplay())
 
 
 class SimpleP_Player():
-	pass
+	def __init__(self):
+		self.Game = Battle()
+	
+	def play(self) -> int: 
+		""" Cette fonction va simuler un coup joué par un joueur probabiliste simplifié.
+  
+		En fonction d'un bateau, on calcule la probabilité qu'il soit présent sur la case (sans tenir compte des positions des autres bateaux)
 
-
+		On somme la probabilité pour un bateau donné et on obtient la probabilité jointe - si on considère que la position des autres bateaux est indépendante par rapport a celui choisi.
+  
+		On obtient en retour le nombre de coups a jouer afin de gagner la partie.
+		"""
+		return
+	
 class MCMethodPlayer():
 	pass
