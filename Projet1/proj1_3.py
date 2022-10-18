@@ -19,22 +19,22 @@ class Battle():
 
 				Hypothèse : Le coup n'a pas déja été joué ici.
 		"""
-		if pos[0] in range(0, self.play_grid.size) and pos[1] in range(0, self.play_grid.size):
-			if not self.play_grid.layout[pos[0], pos[1]]:
-				print("Coup non joué ici auparavant.")
-				self.attempt_count += 1
-				self.play_grid.layout[pos[0], pos[1]] = True
-				if self.rand_grid.layout[pos[0], pos[1]] != 0:
-					print("Bateau touché !")
-					self.hit_count += 1
-					return True
-				else:
-					print("Manqué...")
-					return False
+		if not self.play_grid.check_bound(pos):
+			return False
+		(x, y) = pos
+		if not self.play_grid.layout[x, y]:
+			#print("Coup non joué ici auparavant.")
+			self.attempt_count += 1
+			self.play_grid.layout[x, y] = True
+			if self.rand_grid.layout[x, y] != 0:
+				#print("Bateau touché !")
+				self.hit_count += 1
+				return True
 			else:
-				print("Coup déja joué ici, tentez une autre position.")
+				#print("Manqué...")
 				return False
 		else:
+			#print("Coup déja joué ici, tentez une autre position.")
 			return False
 
 	def victory(self) -> bool:
@@ -81,6 +81,14 @@ print("Nombre de coups 'Version aléatoire': {}".format(r.random_play()))
 s = 0
 for k in range(17, 101):
 	s = s + k*(math.comb(83, k-17)/math.comb(100, k))
+print(s)
+i=17
+j=100
+s=1
+while j > 70:
+	s *= i/j
+	i=i
+	j=j-1
 print(s)
 # -------------
 
@@ -146,6 +154,8 @@ class SimpleP_Player():
   
 		On obtient en retour le nombre de coups a jouer afin de gagner la partie.
 		"""
+		
+
 		return
 	
 class MCMethodPlayer():

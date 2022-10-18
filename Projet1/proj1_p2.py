@@ -29,9 +29,16 @@ class Grid ():
 		"""
 		return self.dict_bat_size.get(bat)
 
+	def check_bound(self, position) -> bool:
+		""" Renvoie sous forme de booléen si la position est à l'intérieur de la grille """
+		(x, y) = position
+		return x in range(0, self.size) and y in range(0, self.size)
+
 	def peut_placer(self, bat: int, pos: tuple, dir: int) -> bool:
 		""" Retourne sous forme de booléen si le bateau b peut etre placé a la postion et avec la direction indiquées
 		"""	
+		if not self.check_bound(pos):
+			return False
 		# Placement du bateau
 		lig_pos = pos[0]
 		col_pos = pos[1]
