@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import copy
 import math
 import proj1_p2 as g
+import time
 from numpy.random import default_rng
 rng = default_rng()
 
@@ -42,8 +43,40 @@ class Battle():
 
 	def reset(self) -> None:
 		self.hit_count = 0
+		self.attempt_count = 0
 		self.rand_grid = g.generate_grid()
+		self.play_grid = g.Grid()
 		print("Partie réinitalisée.")
+
+
+	def distribution(self, player) :
+		""" On joue 1000 fois une version de jeu, et on stocke dans un tableau le nombre 
+ 			le nombre de tours pour chaque victoire
+		"""
+		hits = []
+		freq = [0 for i in range(17, 101)]
+		for i in range(1000) :
+			hits.append(player.play())
+			freq[player.play() - 17] += 1
+			player.__init__()
+		return hits, freq
+
+	def display_distribution(self, player):
+		""" Calcule et affiche la distribution et l'espérance du nombre de victoire
+			en fonction du nombre de coups d'une version de jeu joué 
+		"""
+		hits, freq = self.distribution(player)
+		esp = 0
+		for i in range(17, 101) :
+			esp += i * freq[i - 17]
+		esp = esp/1000
+		arr = np.array(hits)
+		plt.hist(hits, bins = 100)
+		plt.title("Distribution de la v.a pour 1000 tests Version {}".format(player.name))
+		plt.xlabel('Nombre de tours')
+		plt.ylabel('Fréquence')
+		plt.show()
+		return esp
 
 
 class RandomPlayer():
@@ -52,99 +85,84 @@ class RandomPlayer():
 	# Espérance = sum([17 <= k <= 100], k*P(X = k))*
 	# A vérifier
 	def __init__(self):
-		self.battle = Battle()
+		self.game = Battle()
+		self.name = "Random"
 
-	def random_play(self) -> int:
+	def play(self) -> int:
 		""" Renvoie le nombre de coups joués avant la victoire
 
 		Cette fonction va tenter de jouer un coup valide tant que la condition de victoire n'est pas atteinte.
 		Version aléatoire
 		"""
-		random_grid = self.battle.rand_grid
-		while not self.battle.victory():
+		random_grid = self.game.rand_grid
+		while not self.game.victory():
 			x = rng.integers(random_grid.size)
 			y = rng.integers(random_grid.size)
-			self.battle.play((x, y))
-		return self.battle.attempt_count
+			self.game.play((x, y))
+		return self.game.attempt_count
 
-	def distribution_graph():
-		""" Renvoie le graphique de la distribution de la variable
-			aléatoire du nombre de coups joués pendant la partie.
-		Version aléatoire
-		"""
-
-		return
 # -----Test----
+b = Battle()
 r = RandomPlayer()
-
-print("Nombre de coups 'Version aléatoire': {}".format(r.random_play()))
+print("Esperence Version aléatoire: {}".format(b.display_distribution(r)))
+print("Nombre de coups 'Version aléatoire': {}".format(r.play()))
 s = 0
 for k in range(17, 101):
 	s = s + k*(math.comb(83, k-17)/math.comb(100, k))
 print(s)
-i=17
-j=100
-s=1
-while j > 70:
-	s *= i/j
-	i=i
-	j=j-1
-print(s)
+
 # -------------
 
 
 class HeuristicPlayer():
 	def __init__(self):
-		self.battle = Battle()
+		self.game = Battle()
+		self.name = "Heuristique"
 
-	def hplay(self) -> int:
+	def play(self) -> int:
 		""" Renvoie le nombre de coups joués avant la victoire
 
 		Version heuristique
 		"""
-		random_grid = self.battle.rand_grid
+		random_grid = self.game.rand_grid
 		prev_hit = 0
-		while not self.battle.victory():
-			if self.battle.hit_count != prev_hit:  # si on a touché un bateau
+		while not self.game.victory():
+			if self.game.hit_count != prev_hit:  # si on a touché un bateau
 				for k, xc, yc in [("left", x, y-1), ("right", x, y+1), ("down", x-1, y), ("up", x+1, y)]:
-					prev_hit = self.battle.hit_count
-					self.battle.play((xc, yc))
+					prev_hit = self.game.hit_count
+					self.game.play((xc, yc))
 					cpt = 0
-					while self.battle.hit_count != prev_hit:  # si touché dans une case connexe on continue sur le meme chemin
+					while self.game.hit_count != prev_hit:  # si touché dans une case connexe on continue sur le meme chemin
 						cpt += 1
-						prev_hit = self.battle.hit_count
+						prev_hit = self.game.hit_count
 						if k == "left":
-							self.battle.play((xc, yc-cpt))
+							self.game.play((xc, yc-cpt))
 						if k == "right":
-							self.battle.play((xc, yc+cpt))
+							self.game.play((xc, yc+cpt))
 						if k == "down":
-							self.battle.play((xc-cpt, yc))
+							self.game.play((xc-cpt, yc))
 						if k == "up":
-							self.battle.play((xc+cpt, yc))
+							self.game.play((xc+cpt, yc))
 			else:
 				x = rng.integers(random_grid.size)
 				y = rng.integers(random_grid.size)
-				prev_hit = self.battle.hit_count
-				self.battle.play((x, y))
+				prev_hit = self.game.hit_count
+				self.game.play((x, y))
 
-		return self.battle.attempt_count
+		return self.game.attempt_count
 
-	def distribution_graph():
-		""" Renvoie le graphique de la distribution de la variable
-			aléatoire du nombre de coups joués pendant la partie.
-		Version heuristique
-		"""
-
-		return
 #--------------------
 h = HeuristicPlayer()
-print("Nombre de coups 'Version heuristique': {}".format(h.hplay()))
+print("Esperence Version heuristique: {}".format(b.display_distribution(h)))
+
+print("Nombre de coups 'Version heuristique': {}".format(h.play()))
 #--------------------
 
 class SimpleP_Player():
 	def __init__(self):
-		self.Game = Battle()
-	
+		self.game = Battle()
+		self.name = "probabiliste simplifiée"
+
 	def play(self) -> int: 
 		""" Cette fonction va simuler un coup joué par un joueur probabiliste simplifié.
   
