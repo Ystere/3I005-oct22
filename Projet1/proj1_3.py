@@ -48,7 +48,7 @@ class Battle():
 		print("Partie réinitalisée.")
 
 
-	def distribution(self, player, n):
+	def distribution(self, player, n: int) -> tuple:
 		""" On joue n fois une version de jeu, et on stocke dans un tableau le nombre 
  			le nombre de tours pour chaque victoire et dans un autre la frequence des nombres de tours
 		"""
@@ -60,7 +60,7 @@ class Battle():
 			player.__init__()
 		return hits, freq
 
-	def display_distribution(self, player, n) -> float:
+	def display_distribution(self, player, n: int) -> float:
 		""" Calcule et affiche la distribution et l'espérance du nombre de victoire
 			en fonction du nombre de coups d'une version de jeu joué 
 		"""
