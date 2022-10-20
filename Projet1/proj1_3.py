@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import copy
 import math
 import proj1_p2 as g
-import time
 from numpy.random import default_rng
 rng = default_rng()
 
@@ -49,30 +48,29 @@ class Battle():
 		print("Partie réinitalisée.")
 
 
-	def distribution(self, player) :
-		""" On joue 1000 fois une version de jeu, et on stocke dans un tableau le nombre 
- 			le nombre de tours pour chaque victoire
+	def distribution(self, player, n):
+		""" On joue n fois une version de jeu, et on stocke dans un tableau le nombre 
+ 			le nombre de tours pour chaque victoire et dans un autre la frequence des nombres de tours
 		"""
 		hits = []
 		freq = [0 for i in range(17, 101)]
-		for i in range(1000) :
+		for i in range(n) :
 			hits.append(player.play())
 			freq[player.play() - 17] += 1
 			player.__init__()
 		return hits, freq
 
-	def display_distribution(self, player):
+	def display_distribution(self, player, n) -> float:
 		""" Calcule et affiche la distribution et l'espérance du nombre de victoire
 			en fonction du nombre de coups d'une version de jeu joué 
 		"""
-		hits, freq = self.distribution(player)
+		(hits, freq) = self.distribution(player, n)
 		esp = 0
 		for i in range(17, 101) :
 			esp += i * freq[i - 17]
-		esp = esp/1000
-		arr = np.array(hits)
+		esp = esp/n
 		plt.hist(hits, bins = 100)
-		plt.title("Distribution de la v.a pour 1000 tests Version {}".format(player.name))
+		plt.title("Distribution de la v.a pour {} tests Version {}".format(n, player.name))
 		plt.xlabel('Nombre de tours')
 		plt.ylabel('Fréquence')
 		plt.show()
@@ -104,13 +102,8 @@ class RandomPlayer():
 # -----Test----
 b = Battle()
 r = RandomPlayer()
-print("Esperence Version aléatoire: {}".format(b.display_distribution(r)))
+print("Esperence Version aléatoire: {}".format(b.display_distribution(r, 1000)))
 print("Nombre de coups 'Version aléatoire': {}".format(r.play()))
-s = 0
-for k in range(17, 101):
-	s = s + k*(math.comb(83, k-17)/math.comb(100, k))
-print(s)
-
 # -------------
 
 
@@ -153,7 +146,7 @@ class HeuristicPlayer():
 
 #--------------------
 h = HeuristicPlayer()
-print("Esperence Version heuristique: {}".format(b.display_distribution(h)))
+print("Esperence Version heuristique: {}".format(b.display_distribution(h, 1000)))
 
 print("Nombre de coups 'Version heuristique': {}".format(h.play()))
 #--------------------
@@ -162,7 +155,9 @@ class SimpleP_Player():
 	def __init__(self):
 		self.game = Battle()
 		self.name = "probabiliste simplifiée"
-
+		self.boat_left = list(map(list, g.Grid().dict_bat_size.items()))
+		self.probas = g.generate_grid()
+  
 	def play(self) -> int: 
 		""" Cette fonction va simuler un coup joué par un joueur probabiliste simplifié.
   
@@ -173,8 +168,108 @@ class SimpleP_Player():
 		On obtient en retour le nombre de coups a jouer afin de gagner la partie.
 		"""
 		
+		# self.probas : list(list(int)), est ré-initialisée à chaque tour
+		self.probas = g.generate_grid()
 
-		return
-	
-class MCMethodPlayer():
-	pass
+		# t : int, décalage
+		t = 0
+		# bonus : int
+		bonus = 0
+		# peut_poser : boolean
+		peut_poser = False
+
+		effect = -1
+		# effect est <= -1 quand la case visée a déjà été jouée
+		while (effect <= -1) :
+			""" Calculer la probabilité pour chaque case de contenir ce
+			bateau sans tenir compte de la position des autres bateaux.
+			"""
+			# Pour chaque bateau restant :
+			for b in self.boat_left :
+				# Pour chaque case :
+				for i in range(10) :
+					for j in range(10) :
+						# Si la case à été jouée et n'était pas un bateau :
+						if self.game.play_grid.layout[i,j] and not self.game.rand_grid.layout[i,j]:
+							# Pas de bateau ici
+							self.probas[i][j] = 0
+						else :
+							t = 0
+							bonus = 0
+							# Si la case était un bateau et a été jouée
+							if self.game.play_grid.layout[i,j] and self.game.rand_grid.layout[i,j]:
+								# Les probabilités seront plus grandes
+								bonus = 1
+								self.probas[i][j] = 0
+								t = 1
+
+							""" position verticale """
+							peut_poser = True
+							# Parcours des cases direction sud :
+							for u in range(1, b[0][1]) :
+								# Si la case explorée est hors-limite ou
+								# qu'elle a été jouée et n'a pas touché de
+								# bateau :
+								if not self.game.play_grid.check_bound((i+u,j)) or (self.game.play_grid.layout[i,j] and not self.game.rand_grid.layout[i,j]):
+									peut_poser = False
+									break
+								# Si la case explorée est un bateau touché, les
+								# chances qu'une autre case bateau se trouve
+								# proche sont plus grandes :
+								if self.game.play_grid.layout[i,j] and self.game.rand_grid.layout[i,j] :
+									# On augmente les probabilités des cases explorées
+									bonus += 1
+							""" Attribution des probabilités """
+							if peut_poser :
+								# on peut attribuer leurs probabilités aux
+								# cases que le bateau pourrait couvrir sur sa longueur (bonus *2)
+								for u in range(t, b[0][1]) :
+									if not (self.game.play_grid.layout[i+u,j] and self.game.rand_grid.layout[i,j]) :
+										self.probas.layout[i+u,j] += 1 + bonus * 2
+
+							"""position horizontale """
+							peut_poser = True
+							for v in range(1, b[0][1]) :
+								# Si la case explorée est hors-limite ou
+								# qu'elle a été jouée et n'a pas touché de
+								# bateau :
+								if not self.game.play_grid.check_bound((i,j+v)) or (self.game.play_grid.layout[i,j+v] and not self.game.rand_grid.layout[i,j+v]):
+									peut_poser = False
+									break
+								# Si la case explorée est un bateau touché, les
+								# chances qu'une autre case bateau se trouve
+								# proche sont plus grandes
+								if self.game.play_grid.layout[i,j+v] and self.game.rand_grid.layout[i,j+v] :
+									bonus += 1
+							""" Attribution des probabilités """
+							if peut_poser :
+								# on peut attribuer leurs probabilités aux
+								# cases que le bateau pourrait couvrir sur sa longueur (bonus *2)
+								for v in range(t, b[0][1]) :
+									if not (self.game.play_grid.layout[i,j+v] and self.game.rand_grid.layout[i,j+v]) :
+										self.probas.layout[i,j+v] += 1 + bonus * 2
+
+			"""Choisir une position dans probas"""
+			# C'est le moment où après avoir calculé une grille de
+			# probabilités on choisit la case ayant la plus forte probabilité
+			# de contenir un bateau
+			maxiProba = np.argmax(self.probas.layout).all()
+			x = maxiProba // 10
+			y = maxiProba + 10 % 10
+			effect = self.game.play((x, y))
+
+		
+		"""Màj des bateaux restants en cas de tir réussi"""
+		if effect != 0 :
+			for i in range(len(self.boat_left)) :
+				if self.boat_left[i][0] == effect :
+					self.boat_left[i] = (self.boat_left[i][0], self.boat_left[i][1] - 1)
+
+		return effect
+
+#--------------------
+s = SimpleP_Player()
+
+print("Esperence Version {}: {}".format(s.name, b.display_distribution(h, 1000)))
+print("Nombre de coups 'Version {}': {}".format(s.name, s.play()))
+#--------------------
