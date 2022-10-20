@@ -185,8 +185,8 @@ def nb_generation(grid: Grid) -> int:
 
 ######==========	Jeux de tests	==========######
 
-grid1 = generate_grid()
-print(grid1.layout)
+#grid1 = generate_grid()
+#print(grid1.layout)
 
 #grid2 = Grid()
 #print(grid2.layout)
